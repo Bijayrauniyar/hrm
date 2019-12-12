@@ -19,9 +19,22 @@ import reducer from './reducer';
 import saga from './saga';
 import { loginRequeust } from './actions';
 
-export function Login({ onSubmitForm }) {
+export function Login(props) {
   useInjectReducer({ key: 'login', reducer });
   useInjectSaga({ key: 'login', saga });
+
+  const makeLogin = (evt, user) => {
+    evt.preventDefault();
+
+    props.submitForm(user);
+  };
+
+  const user = {
+    username: 'admin@example.com',
+    password: '$asdf6',
+  };
+
+  const { login } = props;
 
   return (
     <div>
@@ -31,11 +44,11 @@ export function Login({ onSubmitForm }) {
       </Helmet>
       <Container>
         <Row className="justify-content-md-center">
-          <Col md="3">
+          <Col lg="4" md="6" sm="6" xs="12">
             <Card>
               <Card.Header>Login</Card.Header>
               <Card.Body>
-                <Form onSubmit={onSubmitForm}>
+                <Form onSubmit={evt => makeLogin(evt, user)}>
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" />
@@ -50,8 +63,12 @@ export function Login({ onSubmitForm }) {
                   <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Check me out" />
                   </Form.Group>
-                  <Button variant="primary" type="submit">
-                    Submit
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={login.loading}
+                  >
+                    {login.loading ? ' Logging in ... ' : 'Submit'}
                   </Button>
                 </Form>
               </Card.Body>
@@ -64,7 +81,7 @@ export function Login({ onSubmitForm }) {
 }
 
 Login.propTypes = {
-  onSubmitForm: PropTypes.func,
+  submitForm: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -73,10 +90,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitForm: evt => {
-      evt.preventDefault();
-      dispatch(loginRequeust());
-    },
+    submitForm: user => dispatch(loginRequeust(user)),
   };
 }
 

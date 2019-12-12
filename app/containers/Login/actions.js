@@ -6,24 +6,21 @@
 
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED } from './constants';
 
-export function loginRequeust() {
-  console.log('loginRequest');
+export function loginRequeust(user) {
   return {
     type: LOGIN_REQUEST,
+    user,
   };
 }
 
-export function loginSucess(username, password) {
-  console.log('login success and ', username, password);
+export function loginSucess(user) {
   return {
     type: LOGIN_SUCCESS,
-    username,
-    password,
+    user,
   };
 }
 
 export function LoginFailed(error) {
-  console.log('login failed', error);
   return {
     type: LOGIN_FAILED,
     error,
