@@ -24,6 +24,5 @@ export function LoginFailed(error) {
   return {
     type: LOGIN_FAILED,
     error,
-    message: 'Login Failed',
   };
 }
