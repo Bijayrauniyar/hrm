@@ -1,5 +1,5 @@
 import { delay, put, takeLatest, call } from 'redux-saga/effects';
-
+import { push } from 'connected-react-router';
 import { loginSucess, LoginFailed } from './actions';
 
 import { LOGIN_REQUEST } from './constants';
@@ -25,8 +25,10 @@ export function* login(actions) {
     // login api call validating login
     yield delay(5000);
     const result = yield call(loginapi);
+    yield put(push('/'));
     yield put(loginSucess(result));
   } catch (err) {
+    yield put(push('/login'));
     yield put(LoginFailed(err.message));
   }
 }
