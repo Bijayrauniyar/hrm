@@ -31,7 +31,6 @@ import { loginRequeust } from './actions';
 export function Login(props) {
   useInjectReducer({ key: 'login', reducer });
   useInjectSaga({ key: 'login', saga });
-
   const [loginForm, setLoginForm] = useState({
     userError: null,
     passError: null,
@@ -48,6 +47,7 @@ export function Login(props) {
 
   const makeLogin = evt => {
     evt.preventDefault();
+
     if (loginForm.password === '' && loginForm.username === '') {
       setLoginForm({
         ...loginForm,

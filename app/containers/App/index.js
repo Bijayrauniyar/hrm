@@ -9,21 +9,24 @@
 
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Login from 'containers/Login/Loadable';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import { createStructuredSelector } from 'reselect';
 import GlobalStyle from '../../global-styles';
 import Header from '../../components/Header/index';
+import { makeSelectUser } from './selectors';
 
-export default function App() {
-  const auth = true;
-
+function App({ user }) {
   // eslint-disable-next-line react/prop-types
   const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
       {...rest}
       render={props =>
-        auth ? <Component {...props} /> : <Redirect to="/login" />
+        user ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   );
@@ -40,3 +43,16 @@ export default function App() {
     </div>
   );
 }
+
+App.propTypes = {
+  user: PropTypes.object,
+};
+const mapStateToProps = createStructuredSelector({
+  user: makeSelectUser(),
+});
+const withConnect = connect(
+  mapStateToProps,
+  null,
+);
+
+export default compose(withConnect)(App);

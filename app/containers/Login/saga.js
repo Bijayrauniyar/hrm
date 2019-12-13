@@ -1,13 +1,13 @@
 import { delay, put, takeLatest, call } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
+import { setUser } from 'containers/App/actions';
 import { loginSucess, LoginFailed } from './actions';
-
 import { LOGIN_REQUEST } from './constants';
 
 export function* login(actions) {
   const { user } = actions;
 
-  // login api
+  // mock login api
   const loginapi = () => {
     if (user.username !== 'john@admin.com' || user.password !== 'pass123') {
       throw new Error('invalid credentials !!! ');
@@ -25,6 +25,7 @@ export function* login(actions) {
     // login api call validating login
     yield delay(5000);
     const result = yield call(loginapi);
+    yield put(setUser(result));
     yield put(push('/'));
     yield put(loginSucess(result));
   } catch (err) {
