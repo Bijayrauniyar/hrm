@@ -9,7 +9,6 @@ import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED } from './constants';
 export const initialState = {
   loading: false,
   error: null,
-  user: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -19,12 +18,11 @@ const loginReducer = (state = initialState, action) =>
       case LOGIN_REQUEST:
         draft.loading = true;
         draft.error = false;
-        draft.user = null;
         break;
 
       case LOGIN_SUCCESS:
-        draft.user = action.user;
         draft.loading = false;
+        draft.error = false;
         break;
 
       case LOGIN_FAILED:

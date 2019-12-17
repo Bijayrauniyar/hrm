@@ -31,16 +31,16 @@ import { loginRequeust } from './actions';
 export function Login(props) {
   useInjectReducer({ key: 'login', reducer });
   useInjectSaga({ key: 'login', saga });
-  const [loginForm, setLoginForm] = useState({
-    userError: null,
-    passError: null,
+  const [loginData, setStateLoginData] = useState({
+    userError: '',
+    passError: '',
     username: '',
     password: '',
   });
 
-  const onChangee = e => {
-    setLoginForm({
-      ...loginForm,
+  const onChange = e => {
+    setStateLoginData({
+      ...loginData,
       [e.target.name]: e.target.value,
     });
   };
@@ -48,37 +48,50 @@ export function Login(props) {
   const makeLogin = evt => {
     evt.preventDefault();
 
-    if (loginForm.password === '' && loginForm.username === '') {
-      setLoginForm({
-        ...loginForm,
+    if (loginData.username === '' && loginData.password === '') {
+      setStateLoginData({
+        ...loginData,
         userError: 'Username is required',
         passError: 'Password is required',
       });
-    } else if (loginForm.username === '') {
-      setLoginForm({
-        ...loginForm,
-        passError: null,
+    } else if (loginData.username === '') {
+      setStateLoginData({
+        ...loginData,
         userError: 'Username is required',
       });
-    } else if (loginForm.password === '') {
-      setLoginForm({
-        ...loginForm,
-        userError: null,
+    } else if (loginData.password === '') {
+      setStateLoginData({
+        ...loginData,
         passError: 'Password is required',
       });
     } else {
-      console.log('on submit', loginForm.username, loginForm.password);
-
+      console.log('on submit', loginData.username, loginData.password);
+      setStateLoginData({
+        ...loginData,
+        userError: '',
+        passError: '',
+      });
       const user = {
-        username: loginForm.username,
-        password: loginForm.password,
+        username: loginData.username,
+        password: loginData.password,
       };
       props.submitForm(user);
     }
   };
 
   const { login } = props;
-
+  // changing login form value with signup form
+  // if (signup.user) {
+  //   const { username, password } = signup.user;
+  //   if (username !== loginData.username && password !== loginData.password) {
+  //     console.log(username, password);
+  //     setStateLoginData({
+  //       ...loginData,
+  //       username,
+  //       password,
+  //     });
+  //   }
+  // }
   return (
     <div>
       <Helmet>
@@ -91,15 +104,21 @@ export function Login(props) {
             <Card>
               <Card.Header>Login</Card.Header>
               <Card.Body>
+                {login.error ? (
+                  <Alert variant="danger">{login.error}</Alert>
+                ) : null}
+                {/* {signup.user ? (
+                  <Alert variant="primary">Successfully signed up!</Alert>
+                ) : null} */}
                 <Form onSubmit={evt => makeLogin(evt)}>
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
                       type="email"
                       name="username"
-                      value={loginForm.username}
+                      value={loginData.username}
                       placeholder="Enter email"
-                      onChange={onChangee}
+                      onChange={onChange}
                     />
                     <Form.Text className="text-muted">
                       We'll never share your email with anyone else.
@@ -110,19 +129,19 @@ export function Login(props) {
                     <Form.Control
                       type="password"
                       name="password"
-                      value={loginForm.password}
+                      value={loginData.password}
                       placeholder="Password"
-                      onChange={onChangee}
+                      onChange={onChange}
                     />
                   </Form.Group>
                   <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Check me out" />
                   </Form.Group>
-                  {loginForm.userError || loginForm.passError ? (
+                  {loginData.userError || loginData.passError ? (
                     <Alert variant="danger">
-                      {loginForm.userError}
+                      {loginData.userError}
                       <br />
-                      {loginForm.passError}
+                      {loginData.passError}
                     </Alert>
                   ) : null}
                   <Button

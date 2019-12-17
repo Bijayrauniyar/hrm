@@ -13,14 +13,13 @@ export function loginRequeust(user) {
   };
 }
 
-export function loginSucess(user) {
+export function loginSuccess() {
   return {
     type: LOGIN_SUCCESS,
-    user,
   };
 }
 
-export function LoginFailed(error) {
+export function loginFailed(error) {
   return {
     type: LOGIN_FAILED,
     error,
