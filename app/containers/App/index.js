@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Login from 'containers/Login/Loadable';
 import { connect } from 'react-redux';
@@ -20,17 +20,18 @@ import { createStructuredSelector } from 'reselect';
 import GlobalStyle from '../../global-styles';
 import Header from '../../components/Header/index';
 import { makeSelectUser } from './selectors';
+import AuthenticatedRoute from '../AuthenticatedRoute/Loadable';
 
 function App(props) {
   // eslint-disable-next-line react/prop-types
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-      {...rest}
-      render={prop =>
-        props.user ? <Component {...prop} /> : <Redirect to="/login" />
-      }
-    />
-  );
+  // const PrivateRoute = ({ component: Component, ...rest }) => (
+  //   <Route
+  //     {...rest}
+  //     render={prop =>
+  //       props.user ? <Component {...prop} /> : <Redirect to="/login" />
+  //     }
+  //   />
+  // );
 
   return (
     <div>
@@ -38,7 +39,8 @@ function App(props) {
       <Switch>
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
-        <PrivateRoute exact path="/" component={HomePage} />
+        {/* <PrivateRoute exact path="/" component={HomePage} /> */}
+        <AuthenticatedRoute exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
