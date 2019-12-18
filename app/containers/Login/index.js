@@ -30,9 +30,9 @@ import saga from './saga';
 import { loginRequeust } from './actions';
 
 export function Login(props) {
-  if (props.user) {
-    props.history.push('/');
-  }
+  // if (props.user) {
+  //   props.history.push('/');
+  // }
 
   useInjectReducer({ key: 'login', reducer });
   useInjectSaga({ key: 'login', saga });

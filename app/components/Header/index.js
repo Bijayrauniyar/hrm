@@ -20,9 +20,18 @@ function Header(props) {
             <Link
               onClick={() => props.dispatch(logout())}
               style={{ padding: '0.25em 2em' }}
-              to="/login"
+              to="/"
             >
               Logout
+            </Link>
+            <Link style={{ padding: '0.25em 2em' }} to="/any">
+              any
+            </Link>
+            <Link style={{ padding: '0.25em 2em' }} to="/login">
+              Login
+            </Link>
+            <Link style={{ padding: '0.25em 2em' }} to="/signup">
+              Signup
             </Link>
           </Nav>
         </Navbar>

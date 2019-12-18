@@ -1,9 +1,21 @@
-import { delay, put, takeLatest, call } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
+import { delay, select, put, takeLatest, call } from 'redux-saga/effects';
+import { push, LOCATION_CHANGE } from 'connected-react-router';
 import { setUser, removeUser } from 'containers/App/actions';
+import { makeSelectUser } from '../App/selectors';
 import { loginSuccess, loginFailed } from './actions';
 import { LOGIN_REQUEST, LOGOUT_USER } from './constants';
 
+export function* checkLoggedIn(actions) {
+  const { location } = actions.payload;
+  const user = yield select(makeSelectUser());
+  if (
+    (location.pathname === '/login' || location.pathname === '/signup') &&
+    user
+  ) {
+    yield delay(1);
+    yield put(push('/'));
+  }
+}
 export function* logout() {
   yield delay(1000);
   yield put(removeUser());
@@ -44,4 +56,5 @@ export function* login(actions) {
 export default function* watchLogin() {
   yield takeLatest(LOGIN_REQUEST, login);
   yield takeLatest(LOGOUT_USER, logout);
+  yield takeLatest(LOCATION_CHANGE, checkLoggedIn);
 }
