@@ -6,7 +6,7 @@
 
 import produce from 'immer';
 
-import { SET_USER } from './constants';
+import { SET_USER, REMOVE_USER } from './constants';
 
 // The initial state of the App
 export const initialState = {
@@ -20,6 +20,9 @@ const appReducer = (state = initialState, action) =>
     switch (action.type) {
       case SET_USER:
         draft.user = action.user;
+        break;
+      case REMOVE_USER:
+        draft.user = null;
         break;
       default:
         return draft;

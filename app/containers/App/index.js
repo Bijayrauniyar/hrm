@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import Login from 'containers/Login/Loadable';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { createStructuredSelector } from 'reselect';
@@ -20,20 +21,20 @@ import GlobalStyle from '../../global-styles';
 import Header from '../../components/Header/index';
 import { makeSelectUser } from './selectors';
 
-function App({ user }) {
+function App(props) {
   // eslint-disable-next-line react/prop-types
   const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
       {...rest}
-      render={props =>
-        user ? <Component {...props} /> : <Redirect to="/login" />
+      render={prop =>
+        props.user ? <Component {...prop} /> : <Redirect to="/login" />
       }
     />
   );
 
   return (
     <div>
-      <Header />
+      <Header user={props.user} dispatch={props.dispatch} />
       <Switch>
         <Route exact path="/login" component={Login} />
         <PrivateRoute exact path="/" component={HomePage} />
@@ -46,13 +47,20 @@ function App({ user }) {
 
 App.propTypes = {
   user: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
 });
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+}
 const withConnect = connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 );
 
 export default compose(withConnect)(App);

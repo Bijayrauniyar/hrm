@@ -1,9 +1,13 @@
 import { delay, put, takeLatest, call } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { setUser } from 'containers/App/actions';
+import { setUser, removeUser } from 'containers/App/actions';
 import { loginSuccess, loginFailed } from './actions';
+import { LOGIN_REQUEST, LOGOUT_USER } from './constants';
 
-import { LOGIN_REQUEST } from './constants';
+export function* logout() {
+  yield delay(1000);
+  yield put(removeUser());
+}
 
 export function* login(actions) {
   const { user } = actions;
@@ -39,4 +43,5 @@ export function* login(actions) {
  */
 export default function* watchLogin() {
   yield takeLatest(LOGIN_REQUEST, login);
+  yield takeLatest(LOGOUT_USER, logout);
 }

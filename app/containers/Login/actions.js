@@ -4,7 +4,12 @@
  *
  */
 
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED } from './constants';
+import {
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILED,
+  LOGOUT_USER,
+} from './constants';
 
 export function loginRequeust(user) {
   return {
@@ -23,5 +28,10 @@ export function loginFailed(error) {
   return {
     type: LOGIN_FAILED,
     error,
+  };
+}
+export function logout() {
+  return {
+    type: LOGOUT_USER,
   };
 }

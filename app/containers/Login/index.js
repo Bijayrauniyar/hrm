@@ -23,12 +23,17 @@ import {
 } from 'react-bootstrap';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { makeSelectUser } from '../App/selectors';
 import makeSelectLogin from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import { loginRequeust } from './actions';
 
 export function Login(props) {
+  if (props.user) {
+    props.history.push('/');
+  }
+
   useInjectReducer({ key: 'login', reducer });
   useInjectSaga({ key: 'login', saga });
   const [loginData, setStateLoginData] = useState({
@@ -57,25 +62,25 @@ export function Login(props) {
     } else if (loginData.username === '') {
       setStateLoginData({
         ...loginData,
+        passError: '',
         userError: 'Username is required',
       });
     } else if (loginData.password === '') {
       setStateLoginData({
         ...loginData,
+        userError: '',
         passError: 'Password is required',
       });
     } else {
-      console.log('on submit', loginData.username, loginData.password);
+      props.submitForm({
+        username: loginData.username,
+        password: loginData.password,
+      });
       setStateLoginData({
         ...loginData,
         userError: '',
         passError: '',
       });
-      const user = {
-        username: loginData.username,
-        password: loginData.password,
-      };
-      props.submitForm(user);
     }
   };
 
@@ -92,6 +97,10 @@ export function Login(props) {
   //     });
   //   }
   // }
+  if (loginData.username === 'error') {
+    // Simulate a JS error
+    throw new Error('I crashed!');
+  }
   return (
     <div>
       <Helmet>
@@ -119,6 +128,7 @@ export function Login(props) {
                       value={loginData.username}
                       placeholder="Enter email"
                       onChange={onChange}
+                      isInvalid={!loginData.username && loginData.userError}
                     />
                     <Form.Text className="text-muted">
                       We'll never share your email with anyone else.
@@ -132,6 +142,7 @@ export function Login(props) {
                       value={loginData.password}
                       placeholder="Password"
                       onChange={onChange}
+                      isInvalid={!loginData.password && loginData.passError}
                     />
                   </Form.Group>
                   <Form.Group controlId="formBasicCheckbox">
@@ -155,6 +166,7 @@ export function Login(props) {
                           as="span"
                           animation="border"
                           role="status"
+                          size="sm"
                           aria-hidden="true"
                         />
                         {'  '}
@@ -177,10 +189,13 @@ export function Login(props) {
 Login.propTypes = {
   submitForm: PropTypes.func,
   login: PropTypes.object,
+  user: PropTypes.object,
+  history: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   login: makeSelectLogin(),
+  user: makeSelectUser(),
 });
 
 function mapDispatchToProps(dispatch) {
