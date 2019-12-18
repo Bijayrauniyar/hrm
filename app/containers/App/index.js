@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import Login from 'containers/Login/Loadable';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-
+import Signup from 'containers/Signup/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { createStructuredSelector } from 'reselect';
@@ -37,6 +37,7 @@ function App(props) {
       <Header user={props.user} dispatch={props.dispatch} />
       <Switch>
         <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={Signup} />
         <PrivateRoute exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
