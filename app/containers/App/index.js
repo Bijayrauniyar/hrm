@@ -21,26 +21,34 @@ import GlobalStyle from '../../global-styles';
 import Header from '../../components/Header/index';
 import { makeSelectUser } from './selectors';
 import AuthenticatedRoute from '../AuthenticatedRoute/Loadable';
+import { logout } from '../Login/actions';
+import UnAuthenticatedRoute from '../UnAuthenticatedRoute/index';
+import AdminPage from '../AdminPage/Loadable';
+import { Role } from '../../utils/role';
 
+import Authorization from '../Authorization';
 function App(props) {
-  // eslint-disable-next-line react/prop-types
-  // const PrivateRoute = ({ component: Component, ...rest }) => (
-  //   <Route
-  //     {...rest}
-  //     render={prop =>
-  //       props.user ? <Component {...prop} /> : <Redirect to="/login" />
-  //     }
-  //   />
-  // );
+  const logoutEvent = () => {
+    props.onLogout();
+  };
+
+  const Admin = Authorization([Role.USER, Role.ADMIN]);
 
   return (
     <div>
-      <Header user={props.user} dispatch={props.dispatch} />
+      <Header user={props.user} logout={logoutEvent} />
       <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={Signup} />
+        <UnAuthenticatedRoute exact path="/login" component={Login} />
+        <UnAuthenticatedRoute exact path="/signup" component={Signup} />
         {/* <PrivateRoute exact path="/" component={HomePage} /> */}
         <AuthenticatedRoute exact path="/" component={HomePage} />
+        {/* <AuthenticatedRoute
+          exact
+          userRole={Role.ADMIN}
+          path="/admin"
+          component={AdminPage}
+        /> */}
+        <Route exact path="/admin" component={Admin(AdminPage)} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
@@ -50,7 +58,7 @@ function App(props) {
 
 App.propTypes = {
   user: PropTypes.object,
-  dispatch: PropTypes.func,
+  onLogout: PropTypes.func,
 };
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
@@ -58,7 +66,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    onLogout: () => dispatch(logout()),
   };
 }
 const withConnect = connect(

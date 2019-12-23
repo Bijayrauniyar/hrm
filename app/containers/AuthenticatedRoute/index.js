@@ -17,17 +17,40 @@ import { makeSelectUser } from '../App/selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-export function AuthenticatedRoute({ component: Component, user, ...rest }) {
+export function AuthenticatedRoute({
+  component: Component,
+  user,
+  userRole,
+  ...rest
+}) {
   useInjectReducer({ key: 'authenticatedRoute', reducer });
   useInjectSaga({ key: 'authenticatedRoute', saga });
 
   return (
     <Route
       {...rest}
-      render={prop =>
-        user != null ? <Component {...prop} /> : <Redirect to="/login" />
-      }
+      render={props => {
+        if (!user) {
+          // not logged in so redirect to login page with the return url
+          return <Redirect to={{ pathname: '/login' }} />;
+        }
+
+        // check if route is restricted by role
+        if (userRole && userRole !== user.role) {
+          // role not authorised so redirect to home page
+          return <Redirect to={{ pathname: '/' }} />;
+        }
+
+        // authorised so return component
+        return <Component {...props} />;
+      }}
     />
+    //   <Route
+    //   {...rest}
+    //   render={prop =>
+    //     user ? <Component {...prop} /> : <Redirect to="/login" />
+    //   }
+    // />
   );
 }
 
@@ -36,6 +59,7 @@ AuthenticatedRoute.propTypes = {
   component: PropTypes.func,
   children: PropTypes.node,
   user: PropTypes.object,
+  userRole: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({

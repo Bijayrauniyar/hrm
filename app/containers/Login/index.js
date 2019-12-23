@@ -189,8 +189,6 @@ export function Login(props) {
 Login.propTypes = {
   submitForm: PropTypes.func,
   login: PropTypes.object,
-  user: PropTypes.object,
-  history: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

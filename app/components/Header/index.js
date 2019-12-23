@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { logout } from '../../containers/Login/actions';
+import { Role } from '../../utils/role';
 function Header(props) {
   if (props.user) {
     return (
@@ -17,8 +17,13 @@ function Header(props) {
             <Link style={{ padding: '0.25em 2em' }} to="/">
               Home
             </Link>
+            {props.user.role === Role.ADMIN && (
+              <Link style={{ padding: '0.25em 2em' }} to="/admin">
+                Admin
+              </Link>
+            )}
             <Link
-              onClick={() => props.dispatch(logout())}
+              onClick={() => props.logout()}
               style={{ padding: '0.25em 2em' }}
               to="/"
             >
@@ -27,6 +32,7 @@ function Header(props) {
             <Link style={{ padding: '0.25em 2em' }} to="/any">
               any
             </Link>
+
             <Link style={{ padding: '0.25em 2em' }} to="/login">
               Login
             </Link>
@@ -45,6 +51,7 @@ function Header(props) {
           <Link style={{ padding: '0.25em 2em' }} to="/login">
             Login
           </Link>
+
           <Link style={{ padding: '0.25em 2em' }} to="/signup">
             Signup
           </Link>
@@ -56,7 +63,7 @@ function Header(props) {
 
 Header.propTypes = {
   user: PropTypes.object,
-  dispatch: PropTypes.func,
+  logout: PropTypes.func,
 };
 
 export default Header;

@@ -1,8 +1,8 @@
 /*
  * App Actions
  */
-
-import { SET_USER, REMOVE_USER } from './constants';
+import { LOGOUT_USER } from '../Login/constants';
+import { SET_USER } from './constants';
 
 export function setUser(user) {
   return {
@@ -13,7 +13,7 @@ export function setUser(user) {
 
 export function removeUser() {
   return {
-    type: REMOVE_USER,
+    type: LOGOUT_USER,
     user: null,
   };
 }

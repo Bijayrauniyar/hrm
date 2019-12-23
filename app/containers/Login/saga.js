@@ -1,41 +1,44 @@
-import { delay, select, put, takeLatest, call } from 'redux-saga/effects';
-import { push, LOCATION_CHANGE } from 'connected-react-router';
-import { setUser, removeUser } from 'containers/App/actions';
-import { makeSelectUser } from '../App/selectors';
+import { delay, put, takeLatest, call } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
+import { setUser } from 'containers/App/actions';
 import { loginSuccess, loginFailed } from './actions';
-import { LOGIN_REQUEST, LOGOUT_USER } from './constants';
-
-export function* checkLoggedIn(actions) {
-  const { location } = actions.payload;
-  const user = yield select(makeSelectUser());
-  if (
-    (location.pathname === '/login' || location.pathname === '/signup') &&
-    user
-  ) {
-    yield delay(1);
-    yield put(push('/'));
-  }
-}
-export function* logout() {
-  yield delay(1000);
-  yield put(removeUser());
-}
+import { LOGIN_REQUEST } from './constants';
 
 export function* login(actions) {
   const { user } = actions;
 
   // mock login api
   const loginApi = () => {
-    if (user.username !== 'john@example.com' || user.password !== 'pass123') {
+    const users = [
+      {
+        id: 1,
+        name: 'John',
+        username: 'john@example.com',
+        password: 'pass123',
+        firstName: 'Admin',
+        lastName: 'lastname',
+        role: 'ADMIN',
+      },
+      {
+        id: 2,
+        name: 'User',
+        username: 'user@example.com',
+        password: 'pass123',
+        firstName: 'lastname',
+        lastName: 'User',
+        role: 'USER',
+      },
+    ];
+
+    const checkUser = users.find(
+      x => x.username === user.username && x.password === user.password,
+    );
+
+    if (!checkUser) {
       throw new Error('invalid credentials !!! ');
     }
-    const userProfile = {
-      id: 1,
-      name: 'John Doe',
-      username: user.username,
-      verified: true,
-    };
-    return userProfile;
+
+    return checkUser;
   };
 
   try {
@@ -55,6 +58,4 @@ export function* login(actions) {
  */
 export default function* watchLogin() {
   yield takeLatest(LOGIN_REQUEST, login);
-  yield takeLatest(LOGOUT_USER, logout);
-  yield takeLatest(LOCATION_CHANGE, checkLoggedIn);
 }
