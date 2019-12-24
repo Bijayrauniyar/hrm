@@ -3,7 +3,7 @@ import { push } from 'connected-react-router';
 import { setUser } from 'containers/App/actions';
 import { loginSuccess, loginFailed } from './actions';
 import { LOGIN_REQUEST } from './constants';
-
+import { Role } from '../../utils/role';
 export function* login(actions) {
   const { user } = actions;
 
@@ -12,12 +12,12 @@ export function* login(actions) {
     const users = [
       {
         id: 1,
-        name: 'John',
-        username: 'john@example.com',
+        name: 'Admin',
+        username: 'admin@example.com',
         password: 'pass123',
         firstName: 'Admin',
         lastName: 'lastname',
-        role: 'ADMIN',
+        role: Role.ADMIN,
       },
       {
         id: 2,
@@ -26,7 +26,16 @@ export function* login(actions) {
         password: 'pass123',
         firstName: 'lastname',
         lastName: 'User',
-        role: 'USER',
+        role: Role.USER,
+      },
+      {
+        id: 3,
+        name: 'Manager',
+        username: 'manager@example.com',
+        password: 'pass123',
+        firstName: 'lastname',
+        lastName: 'User',
+        role: Role.MANAGER,
       },
     ];
 

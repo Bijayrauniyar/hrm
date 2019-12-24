@@ -1,6 +1,6 @@
 /*
  *
- * AuthenticatedRoute actions
+ * Authorization actions
  *
  */
 

@@ -18,10 +18,36 @@ function Header(props) {
               Home
             </Link>
             {props.user.role === Role.ADMIN && (
-              <Link style={{ padding: '0.25em 2em' }} to="/admin">
-                Admin
-              </Link>
+              <>
+                <Link style={{ padding: '0.25em 2em' }} to="/admin">
+                  Admin
+                </Link>
+                <Link style={{ padding: '0.25em 2em' }} to="/manager">
+                  check Manager
+                </Link>
+              </>
             )}
+            {props.user.role === Role.MANAGER && (
+              <>
+                <Link style={{ padding: '0.25em 2em' }} to="/admin">
+                  Admin
+                </Link>
+                <Link style={{ padding: '0.25em 2em' }} to="/manager">
+                  Manager
+                </Link>
+              </>
+            )}
+            {props.user.role === Role.USER && (
+              <>
+                <Link style={{ padding: '0.25em 2em' }} to="/admin">
+                  check Admin
+                </Link>
+                <Link style={{ padding: '0.25em 2em' }} to="/manager">
+                  check Manager
+                </Link>
+              </>
+            )}
+
             <Link
               onClick={() => props.logout()}
               style={{ padding: '0.25em 2em' }}
@@ -34,10 +60,7 @@ function Header(props) {
             </Link>
 
             <Link style={{ padding: '0.25em 2em' }} to="/login">
-              Login
-            </Link>
-            <Link style={{ padding: '0.25em 2em' }} to="/signup">
-              Signup
+              check Login
             </Link>
           </Nav>
         </Navbar>

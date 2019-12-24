@@ -1,9 +1,9 @@
 // import produce from 'immer';
-import authenticatedRouteReducer from '../reducer';
+import managerPageReducer from '../reducer';
 // import { someAction } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
-describe('authenticatedRouteReducer', () => {
+describe('managerPageReducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -13,7 +13,7 @@ describe('authenticatedRouteReducer', () => {
 
   it('returns the initial state', () => {
     const expectedResult = state;
-    expect(authenticatedRouteReducer(undefined, {})).toEqual(expectedResult);
+    expect(managerPageReducer(undefined, {})).toEqual(expectedResult);
   });
 
   /**

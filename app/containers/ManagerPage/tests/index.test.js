@@ -1,6 +1,6 @@
 /**
  *
- * Tests for AuthenticatedRoute
+ * Tests for ManagerPage
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -8,15 +8,21 @@
 
 import React from 'react';
 import { render } from 'react-testing-library';
+import { IntlProvider } from 'react-intl';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import { AuthenticatedRoute } from '../index';
+import { ManagerPage } from '../index';
+import { DEFAULT_LOCALE } from '../../../i18n';
 
-describe('<AuthenticatedRoute />', () => {
+describe('<ManagerPage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const dispatch = jest.fn();
-    render(<AuthenticatedRoute dispatch={dispatch} />);
+    render(
+      <IntlProvider locale={DEFAULT_LOCALE}>
+        <ManagerPage dispatch={dispatch} />
+      </IntlProvider>,
+    );
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -32,7 +38,11 @@ describe('<AuthenticatedRoute />', () => {
   it.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
-    } = render(<AuthenticatedRoute />);
+    } = render(
+      <IntlProvider locale={DEFAULT_LOCALE}>
+        <ManagerPage />
+      </IntlProvider>,
+    );
     expect(firstChild).toMatchSnapshot();
   });
 });

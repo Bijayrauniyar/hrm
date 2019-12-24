@@ -20,19 +20,20 @@ import { createStructuredSelector } from 'reselect';
 import GlobalStyle from '../../global-styles';
 import Header from '../../components/Header/index';
 import { makeSelectUser } from './selectors';
-import AuthenticatedRoute from '../AuthenticatedRoute/Loadable';
 import { logout } from '../Login/actions';
 import UnAuthenticatedRoute from '../UnAuthenticatedRoute/index';
 import AdminPage from '../AdminPage/Loadable';
 import { Role } from '../../utils/role';
-
-import Authorization from '../Authorization';
+import ManagerPage from '../ManagerPage/Loadable';
+import Authorization from '../Authorization/index';
 function App(props) {
   const logoutEvent = () => {
     props.onLogout();
   };
 
-  const Admin = Authorization([Role.USER, Role.ADMIN]);
+  const Home = Authorization([Role.USER, Role.ADMIN, Role.MANAGER]);
+  const Admin = Authorization([Role.ADMIN, Role.MANAGER]);
+  const Manager = Authorization([Role.MANAGER]);
 
   return (
     <div>
@@ -40,14 +41,8 @@ function App(props) {
       <Switch>
         <UnAuthenticatedRoute exact path="/login" component={Login} />
         <UnAuthenticatedRoute exact path="/signup" component={Signup} />
-        {/* <PrivateRoute exact path="/" component={HomePage} /> */}
-        <AuthenticatedRoute exact path="/" component={HomePage} />
-        {/* <AuthenticatedRoute
-          exact
-          userRole={Role.ADMIN}
-          path="/admin"
-          component={AdminPage}
-        /> */}
+        <Route exact path="/" component={Home(HomePage)} />
+        <Route exact path="/manager" component={Manager(ManagerPage)} />
         <Route exact path="/admin" component={Admin(AdminPage)} />
         <Route component={NotFoundPage} />
       </Switch>

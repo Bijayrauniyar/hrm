@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for AuthenticatedRoute
+ * Asynchronously loads the component for ManagerPage
  *
  */
 
